@@ -1,3 +1,4 @@
+import produce from 'immer';
 import {
   ITEM_ADDED,
   ITEM_PRICE_UPDATED,
@@ -15,8 +16,10 @@ export const initialItems = [
 
 export const reducer = (state = initialItems, action) => {
   if (action.type === ITEM_ADDED) {
-    const item = { uuid: id++, quantity: 1, ...action.payload };
-    return [...state, item];
+    return produce(state, (draftState) => {
+      const item = { uuid: id++, quantity: 1, ...action.payload };
+      draftState.push(item);
+    });
   }
 
   if (action.type === ITEM_REMOVED) {
@@ -24,26 +27,16 @@ export const reducer = (state = initialItems, action) => {
   }
 
   if (action.type === ITEM_PRICE_UPDATED) {
-    return state.map((item) => {
-      if (item.uuid === action.payload.uuid) {
-        return {
-          ...item,
-          price: action.payload.price
-        };
-      }
-      return item;
+    return produce(state, (draftState) => {
+      const item = draftState.find((item) => item.uuid === action.payload.uuid);
+      item.price = parseInt(action.payload.price, 10);
     });
   }
 
   if (action.type === ITEM_QUANTITY_UPDATED) {
-    return state.map((item) => {
-      if (item.uuid === action.payload.uuid) {
-        return {
-          ...item,
-          quantity: action.payload.quantity
-        };
-      }
-      return item;
+    return produce(state, (draftState) => {
+      const item = draftState.find((item) => item.uuid === action.payload.uuid);
+      item.quantity = parseInt(action.payload.quantity, 10);
     });
   }
 
