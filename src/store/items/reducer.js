@@ -2,7 +2,8 @@ import {
   ITEM_ADDED,
   ITEM_PRICE_UPDATED,
   ITEM_QUANTITY_UPDATED,
-  ITEM_REMOVED
+  ITEM_REMOVED,
+  ITEM_TOTAL_UPDATED
 } from './actions';
 
 let id = 1;
@@ -25,7 +26,10 @@ export const reducer = (state = initialItems, action) => {
   if (action.type === ITEM_PRICE_UPDATED) {
     return state.map((item) => {
       if (item.uuid === action.payload.uuid) {
-        return { ...item, price: action.payload.price };
+        return {
+          ...item,
+          price: action.payload.price
+        };
       }
       return item;
     });
@@ -34,7 +38,10 @@ export const reducer = (state = initialItems, action) => {
   if (action.type === ITEM_QUANTITY_UPDATED) {
     return state.map((item) => {
       if (item.uuid === action.payload.uuid) {
-        return { ...item, quantity: action.payload.quantity };
+        return {
+          ...item,
+          quantity: action.payload.quantity
+        };
       }
       return item;
     });
